@@ -1,6 +1,17 @@
 from database import get_connection
 
 
+def print_formatted_rows(rows):
+    isCompleted = ""
+    for row in rows:
+        if (row["completed"] == 1):
+            isCompleted = "Sim"
+        else:
+            isCompleted = "Não"
+
+        print(f'Tarefa: {row["title"]} | Concluída: {isCompleted}')
+
+
 def add(title):
     with get_connection() as conn:
         sql = "INSERT INTO tasks (title) VALUES (?)"
@@ -26,14 +37,7 @@ def list_one(task_id):
     with get_connection() as conn:
         sql = "SELECT * FROM tasks WHERE id = ?"
         rows = conn.execute(sql, (task_id,))
-
-        for row in rows:
-            if (row["completed"] == 1):
-                isCompleted = "Sim"
-            else:
-                isCompleted = "Não"
-
-            print(f'Tarefa: {row["title"]} | Concluída: {isCompleted}')
+        print_formatted_rows(rows)
 
 
 def mark_completed(task_id):
@@ -52,45 +56,20 @@ def mark_uncompleted(task_id):
 
 def list_all():
     with get_connection() as conn:
-        sql = "SELECT id, title, completed FROM tasks"
+        sql = "SELECT * FROM tasks"
         rows = conn.execute(sql).fetchall()
-
-        for row in rows:
-            if (row["completed"] == 1):
-                isCompleted = "Sim"
-            else:
-                isCompleted = "Não"
-
-            print(f'Tarefa: {row["title"]} | Concluída: {isCompleted}')
+        print_formatted_rows(rows)
 
 
 def list_completed():
     with get_connection() as conn:
         sql = "SELECT id, title, completed FROM tasks WHERE completed = 1"
         rows = conn.execute(sql).fetchall()
-
-        isCompleted = ""
-
-        for row in rows:
-            if (row["completed"] == 1):
-                isCompleted = "Sim"
-            else:
-                isCompleted = "Não"
-
-            print(f'Tarefa: {row["title"]} | Concluída: {isCompleted}')
+        print_formatted_rows(rows)
 
 
 def list_pending():
     with get_connection() as conn:
         sql = "SELECT id, title, completed FROM tasks WHERE completed = 0"
         rows = conn.execute(sql).fetchall()
-
-        isCompleted = ""
-
-        for row in rows:
-            if (row["completed"] == 1):
-                isCompleted = "Sim"
-            else:
-                isCompleted = "Não"
-
-            print(f'Tarefa: {row["title"]} | Concluída: {isCompleted}')
+        print_formatted_rows(rows)

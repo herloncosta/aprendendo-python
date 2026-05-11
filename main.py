@@ -13,5 +13,6 @@ def main():
     # add("Estudar IA")
     # add("Estudar JavaScript")
 
+    list_all()
 
 main()
